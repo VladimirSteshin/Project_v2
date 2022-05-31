@@ -2,15 +2,17 @@ import requests
 import os
 import datetime
 import json
+import configparser
 
 
 class VKDownload:
 
-    def __init__(self, token, version, vk_id):
-        self.token = token
-        self.version = version
+    def __init__(self, vk_id):
+        config = configparser.ConfigParser()
+        config.read("settings.ini")
+        self.token = config["VK"]["token"]
+        self.version = config["VK"]["version"]
         self.host = "https://api.vk.com/method/"
-        self.version = version
         self.id = vk_id
         self.download_tools = None
         self.json = None

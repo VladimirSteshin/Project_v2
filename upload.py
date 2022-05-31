@@ -1,12 +1,15 @@
 import requests
 from tqdm import tqdm
+import configparser
 
 
 class YAUpload:
-    def __init__(self, token: str, version):
-        self.version = version
+    def __init__(self):
+        config = configparser.ConfigParser()
+        config.read("settings.ini")
+        self.token = config["Yandex"]["token"]
+        self.version = config["Yandex"]["version"]
         self.host = f'https://cloud-api.yandex.net:443/{self.version}/disk/resources'
-        self.token = token
         self.path = 'Photo'
         self.headers = None
         self.folder_link = None
