@@ -9,23 +9,23 @@ class YAUpload:
         config.read("settings.ini")
         self.token = config["Yandex"]["token"]
         self.version = config["Yandex"]["version"]
-        self.host = f'https://cloud-api.yandex.net:443/{self.version}/disk/resources'
-        self.path = 'Photo'
+        self.host = f"https://cloud-api.yandex.net:443/{self.version}/disk/resources"
+        self.path = "Photo"
         self.headers = None
         self.folder_link = None
         self.folder_params = None
 
     def get_headers(self):
         self.headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': f'OAuth {self.token}'
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": f"OAuth {self.token}"
         }
 
     def get_folder_params(self):
         self.folder_params = {
-            'overwrite': True,
-            'path': 'Photo'
+            "overwrite": True,
+            "path": "Photo"
         }
 
     def ya_folder(self):
@@ -37,7 +37,7 @@ class YAUpload:
             pass
 
     def ya_upload(self, links):
-        url = f'{self.host}/upload'
+        url = f"{self.host}/upload"
         for key, value in tqdm(links.items()):
-            requests.post(url, headers=self.headers, params={'path': f'Photo/{key}', 'url': value[0]})
-        print('Photos uploaded')
+            requests.post(url, headers=self.headers, params={"path": f"Photo/{key}", "url": value[0]})
+        print("Photos uploaded")

@@ -7,13 +7,14 @@ import configparser
 
 class VKDownload:
 
-    def __init__(self, vk_id):
+    def __init__(self, vk_id, photo_count):
         config = configparser.ConfigParser()
         config.read("settings.ini")
         self.token = config["VK"]["token"]
         self.version = config["VK"]["version"]
         self.host = "https://api.vk.com/method/"
         self.id = vk_id
+        self.photo_count = photo_count
         self.download_tools = None
         self.json = None
 
@@ -26,7 +27,7 @@ class VKDownload:
             "rev": "1",
             "photo_sizes": "1",
             "extended": "1",
-            "count": "5"
+            "count": self.photo_count
         }
 
     def get_photo_list(self):
@@ -61,5 +62,5 @@ class VKDownload:
             session = {"file_name": key + ".jpg", "size": value[1]}
             log.append(session)
         path = os.getcwd()
-        with open(path + "\\" + "log.json", 'w') as here:
+        with open(path + "\\" + "log.json", "w") as here:
             json.dump(log, here, indent=1)

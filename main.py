@@ -1,11 +1,11 @@
 from download import VKDownload
 from upload import YAUpload
 
-vk_id = "552934290"
+vk_id = input("Enter your nickname or ID: ")
+photo_count = str(input("Enter how much photos you wish to upload: "))
 
 if __name__ == "__main__":
-    download = VKDownload(vk_id)
-    print(download.token)
+    download = VKDownload(vk_id, photo_count)
     download.get_photo_list()
     download.get_download_tools()
     download.log()
