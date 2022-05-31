@@ -2,7 +2,6 @@ import requests
 import os
 import datetime
 import json
-from tqdm import tqdm
 
 
 class VKDownload:
@@ -54,13 +53,11 @@ class VKDownload:
                 download_tools[name] = [url, largest_type]
         self.download_tools = download_tools
 
-    def download_and_log(self):
+    def log(self):
         log = []
-        for key, value in tqdm(self.download_tools.items()):
+        for key, value in self.download_tools.items():
             session = {"file_name": key + ".jpg", "size": value[1]}
             log.append(session)
-        print(f'Photos downloaded from vk')
-        os.chdir("../")
         path = os.getcwd()
         with open(path + "\\" + "log.json", 'w') as here:
             json.dump(log, here, indent=1)
