@@ -7,16 +7,28 @@ import configparser
 
 class VKDownload:
 
-    def __init__(self, vk_id, photo_count):
+    def __init__(self):
         config = configparser.ConfigParser()
         config.read("settings.ini")
         self.token = config["VK"]["token"]
         self.version = config["VK"]["version"]
         self.host = "https://api.vk.com/method/"
-        self.id = vk_id
-        self.photo_count = photo_count
+        self.id = None
         self.download_tools = None
         self.json = None
+        self.screen_name = None
+        self.photo_count = None
+
+    def get_id(self):
+        self.id = str(input("Enter your nickname or ID: "))
+        if self.id.isdigit():
+            pass
+        else:
+            url = f'{self.host}utils.resolveScreenName'
+            response = requests.get(url, params={"access_token": self.token, "v": self.version,
+                                                 "screen_name": self.id})
+            self.id = response.json()['response']['object_id']
+        self.photo_count = str(input("Enter how much photos you wish to upload: "))
 
     def get_params(self):
         return {
@@ -64,3 +76,4 @@ class VKDownload:
         path = os.getcwd()
         with open(path + "\\" + "log.json", "w") as here:
             json.dump(log, here, indent=1)
+
