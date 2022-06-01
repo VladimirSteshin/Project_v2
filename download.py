@@ -22,13 +22,29 @@ class VKDownload:
     def get_id(self):
         self.id = str(input("Enter your nickname or ID: "))
         if self.id.isdigit():
-            pass
+            url = f'{self.host}users.get'
+            response = requests.get(url, params={"access_token": self.token, "v": self.version,
+                                                 'user_ids': self.id})
+            if not response.json()['response']:
+                print('Wrong ID! Try again')
+                self.get_id()
         else:
             url = f'{self.host}utils.resolveScreenName'
             response = requests.get(url, params={"access_token": self.token, "v": self.version,
                                                  "screen_name": self.id})
-            self.id = response.json()['response']['object_id']
-        self.photo_count = str(input("Enter how much photos you wish to upload: "))
+            if not response.json()['response']:
+                print('Wrong nickname! Try again')
+                self.get_id()
+            else:
+                self.id = response.json()['response']['object_id']
+
+    def get_photo_count(self):
+        self.photo_count = str(input("Enter how many photos you wish to upload: "))
+        if self.photo_count.isdigit():
+            pass
+        else:
+            print('Use only digits!')
+            self.get_photo_count()
 
     def get_params(self):
         return {
@@ -45,8 +61,8 @@ class VKDownload:
     def get_photo_list(self):
         url = f"{self.host}photos.get"
         params = self.get_params()
-        request = requests.get(url, params=params).json()
-        self.json = request
+        response = requests.get(url, params=params).json()
+        self.json = response
 
     def get_download_tools(self):
         download_tools = {}
@@ -76,4 +92,3 @@ class VKDownload:
         path = os.getcwd()
         with open(path + "\\" + "log.json", "w") as here:
             json.dump(log, here, indent=1)
-
